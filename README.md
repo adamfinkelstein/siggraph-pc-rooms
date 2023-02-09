@@ -106,11 +106,13 @@ typically there are many SAT variables, so this problem is relatively
 under-constrained and the solver can easily find a solution. A solution however
 is not guaranteed, so we consider many rounds as part of a larger optimization.
 
+*Side note: One might wonder about using the SAT solver to sove the whole problem, including partitioning in the first place instead of using KL. The problem is that SAT solvers, while impressive in the number of variables they can handle, start to blow up when the input contains many hundreds of variables. We did a few initial experiemnts that show this can work for small problem, but fails at the scale of the PC meeting.*
+
 The program executes multiple iterations of the steps outlined above, seeking
 successful solutions to the SAT problem and also minimizing the number of papers
 in the second cut:
 
-REPEAT MANY TIMES:
+**REPEAT MANY TIMES:**
 
 * Use KL to partition graph nodes into Rooms A and B, with Cut edges C.
 * Make subgraph including edges C and nodes adjacent to those edges.
