@@ -134,9 +134,61 @@ pip install networkx
 pip install python-sat
 ```
 
-Then to run this program:
+or an alternative to the pip installs above:
+`pip install -r requirements-m1.txt`
+which works at least on an m1-based Mac running Python 3.10.9.
+
+To generate fake data for testing, use this command:
+
 ```
-python assign-pc-rooms.py filename.csv
+python gen-fake-data.py
 ```
 
-It writes out files `paper-rooms.csv` and `people-rooms.csv`.
+This command produces a file called `fake-data.csv` which contains data in the format output by Linklings (with obfuscates reviewer assignments for papers). Optional arguments adjust the number of papers, number of reviwers and output filename.
+
+Next, to perform room assignments, use this command:
+
+```
+python assign-pc-rooms.py fake-data.csv
+```
+
+The first (optional) argument is the input filename, and another argument adjusts the number of trials (default 1000). It produces output like this: 
+
+```
+Reading fake-data.csv ...
+Input reviewers and papers: 100 1000
+Added 100 nodes and 918 edges to graph.
+About to run 1000 trials for partioning into rooms A,B,X and Y...
+iter: 0 cost: 90 rooms sizes: [228, 228, 228, 226]
+iter: 3 cost: 89 rooms sizes: [228, 228, 228, 227]
+iter: 5 cost: 87 rooms sizes: [229, 229, 229, 226]
+iter: 9 cost: 85 rooms sizes: [229, 229, 229, 228]
+iter: 13 cost: 84 rooms sizes: [229, 229, 229, 229]
+iter: 21 cost: 83 rooms sizes: [230, 230, 230, 227]
+iter: 28 cost: 82 rooms sizes: [230, 230, 230, 228]
+iter: 51 cost: 81 rooms sizes: [230, 230, 230, 229]
+iter: 191 cost: 78 rooms sizes: [231, 231, 231, 229]
+iter: 640 cost: 77 rooms sizes: [231, 231, 231, 230]
+0: Room A has 231 papers and 50 reviewers
+1: Room B has 231 papers and 50 reviewers
+2: Room X has 231 papers and 50 reviewers
+3: Room Y has 230 papers and 50 reviewers
+Papers in Plenary:  77
+writing people-rooms.csv
+writing paper-rooms.csv
+```
+
+As indicated the output room assignments are saved in files `paper-rooms.csv` and `people-rooms.csv`.
+
+Finally, to verify that the assignmnets are all kosher, another program can optionally check them to ensure that every paper appears either with the two assigned reviewers or appears in Plenary:
+
+```
+(venv)> python verify-room-assignments.py 
+Read 1000 papers from fake-data.csv.
+Read 1000 room assignments for papers from paper-rooms.csv.
+Read 100 room assignments for people from people-rooms.csv.
+There are 77 papers in Plenary.
+Done verifying assignments.
+```
+
+It accepts three optional arguments that indicate the original obfuscated data file (default `fake-assignments.csv`) and the paper and reviwer room assignments (default `paper-rooms.csv` and `people-rooms.csv`).
