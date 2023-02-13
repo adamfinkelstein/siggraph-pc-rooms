@@ -26,6 +26,8 @@ def read_data_file(fname):
             continue
         paper,withdrawn,primary,secondary = row[:4]
         if withdrawn == 'False':
+            if secondary and not primary:
+                primary,secondary = secondary,primary
             tup = (paper,primary,secondary)
             tups.append(tup)
         else:
