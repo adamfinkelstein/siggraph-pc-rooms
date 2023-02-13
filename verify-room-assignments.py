@@ -21,6 +21,7 @@ def read_data_file(fname):
     rows = read_csv_rows(fname)
     tups = []
     n_withdrawn = 0
+    n_single = 0
     for row in rows:
         if (len(row)) < 4:
             continue
@@ -28,15 +29,18 @@ def read_data_file(fname):
         if withdrawn == 'False':
             if secondary and not primary:
                 primary,secondary = secondary,primary
+            if not secondary:
+                n_single += 1
             tup = (paper,primary,secondary)
             tups.append(tup)
         else:
             n_withdrawn += 1
     n = len(tups)
+    print(f'Read {n} papers from {fname}.')
+    if n_single:
+        print(f'-- with {n_single} single reviewers (primary or secondary).')
     if n_withdrawn:
-        print(f'Read {n} papers (ignoring {n_withdrawn} withdrawn) from {fname}.')
-    else:
-        print(f'Read {n} papers from {fname}.')
+        print(f'-- ignoring {n_withdrawn} withdrawn papers.')
     return tups
 
 def read_paper_or_people_rooms(fname, label, target_number):
