@@ -194,3 +194,9 @@ Done verifying assignments.
 ```
 
 It accepts three optional arguments that indicate the original obfuscated data file (default `fake-assignments.csv`) and the paper and reviwer room assignments (default `paper-rooms.csv` and `people-rooms.csv`).
+
+### Possible future improvements:
+
+Here are a couple things to think about for 2024:
+* As mentioned above, the current approach assigns papers with only one reviewer assigned ("singletons") randomly to either of the two rooms where that reviewer is assigned. It may be better to assign them to plenary. The reason is that there should be another reviewer assigned later, and after that happens it would be nice if the paper discussion happened in a room with both reviewers present (which is only 50% likely in the current scheme).
+* It would be great to add another set of constraints to the optimization that attempts to organize papers where the two primary chairs are conflicted into two separate rooms -- so Chair A in Room A can discuss papers where Chair B is conflicted (and vice versa). Ideally when both chairs are conflicted the paper would be pushed to Plenary (since this often happens anyway). This is probably difficult to achieve without leaking information about paper identities, because along with opaque paper IDs we also need chair conflict information. And in some cases (like both chairs are conflicted) it could weakly deanonymize the paper.
